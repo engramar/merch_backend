@@ -6,6 +6,7 @@
 #   Comment                                         Date                  Author                        #
 #   ================================                ==========            ================              #
 #   Initial Version                                 25/10/2017            Engramar Bollas               #
+#   Show inserted counts                            29/01/2020            Engramar Bollas               #
 #########################################################################################################
 import sqlite3
 import sys
@@ -30,12 +31,16 @@ CREATE TABLE NSW_BIRTH_RATE (
 
 ''')
 
+#######################################################################
+### Open the input file                                             ### 
+#######################################################################
 fname = 'NSWBirthRate.txt'
 fhand = open(fname)
 
 #######################################################################
 ### Populate NSW_BIRTH_RATE Table                                   ### 
 #######################################################################
+count = 0 
 for line in fhand:	
 	fields = line.split('|')
 
@@ -46,8 +51,6 @@ for line in fhand:
 	POSTCODE  = fields[4].strip() 
 	COUNT     = fields[5].strip() 
 	
-	#if YEAR == "Year" : continue
-
 	cur.execute('''INSERT INTO NSW_BIRTH_RATE
         (
 		YEAR,
@@ -66,7 +69,8 @@ for line in fhand:
 		POSTCODE,
 		COUNT
 		))
-				
+	count += 1	
+
 conn.commit()
 
-print ('Done')
+print ('Successfully completed. Total records inserted : ', count)
