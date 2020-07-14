@@ -4,14 +4,14 @@ import sqlite3
 from os import path
 
 app = Flask(__name__)
-api = Api(app, version='1.0', title='Data Service for NSW birth rate information by suburb',
-          description='This is a Flask-Restplus data service that allows a client to consume APIs related to NSW birth rate information by suburb.',
+api = Api(app, version='1.0', title='APIs for Code.Sydney Merchandises',
+          description='This is a Flask-Restplus data service that allows a client to consume APIs related to Code.Sydney merchandises.',
           )
 
 #Database helper
 ROOT = path.dirname(path.realpath(__file__))
 def connect_db():
-    sql = sqlite3.connect(path.join(ROOT, "NSW_BIRTH_RATE.sqlite"))
+    sql = sqlite3.connect(path.join(ROOT, "stocks.db"))
     sql.row_factory = sqlite3.Row
     return sql
 
@@ -21,52 +21,22 @@ def get_db():
     return g.sqlite_db
 
 @api.route('/all')
-class TopBabyAll(Resource):
+class AllMerch(Resource):
     @api.response(200, 'SUCCESSFUL: Contents successfully loaded')
     @api.response(204, 'NO CONTENT: No content in database')
     @api.doc(description='Retrieving all records from the database for all suburbs.')
     def get(self):
         db = get_db()
-        details_cur = db.execute('select YEAR, LOCALITY, SUBURB, STATE, POSTCODE, COUNT from NSW_BIRTH_RATE')
+        details_cur = db.execute('select id, stockname, imagename from stocks')
         details = details_cur.fetchall()
 
         return_values = []
 
         for detail in details:
             detail_dict = {}
-            detail_dict['YEAR'] = detail['YEAR']
-            detail_dict['LOCALITY'] = detail['LOCALITY']
-            detail_dict['SUBURB'] = detail['SUBURB']
-            detail_dict['STATE'] = detail['STATE']
-            detail_dict['POSTCODE'] = detail['POSTCODE']
-            detail_dict['COUNT'] = detail['COUNT']
-
-            return_values.append(detail_dict)
-
-        return make_response(jsonify(return_values), 200)
-
-
-@api.route('/all/<string:SUBURB>', methods=['GET'])
-class TopBabySuburb(Resource):
-    @api.response(200, 'SUCCESSFUL: Contents successfully loaded')
-    @api.response(204, 'NO CONTENT: No content in database')
-    @api.doc(description='Retrieving all records from the database for one suburb.')
-    def get(self, SUBURB):
-        db = get_db()
-        details_cur = db.execute(
-            'select YEAR, LOCALITY, SUBURB, STATE, POSTCODE, COUNT from NSW_BIRTH_RATE where SUBURB = ? COLLATE NOCASE', [SUBURB])
-        details = details_cur.fetchall()
-
-        return_values = []
-
-        for detail in details:
-            detail_dict = {}
-            detail_dict['YEAR'] = detail['YEAR']
-            detail_dict['LOCALITY'] = detail['LOCALITY']
-            detail_dict['SUBURB'] = detail['SUBURB']
-            detail_dict['STATE'] = detail['STATE']
-            detail_dict['POSTCODE'] = detail['POSTCODE']
-            detail_dict['COUNT'] = detail['COUNT']\
+            detail_dict['id'] = detail['id']
+            detail_dict['stockname'] = detail['stockname']
+            detail_dict['imagename'] = detail['imagename']
 
             return_values.append(detail_dict)
 
