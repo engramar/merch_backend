@@ -27,7 +27,7 @@ class AllMerch(Resource):
     @api.doc(description='Retrieving all records from the database for all suburbs.')
     def get(self):
         db = get_db()
-        details_cur = db.execute('select id, stockname, imagename from stocks')
+        details_cur = db.execute('select id, stockname, imagename, spreadshirtlink from stocks')
         details = details_cur.fetchall()
 
         return_values = []
@@ -37,6 +37,7 @@ class AllMerch(Resource):
             detail_dict['id'] = detail['id']
             detail_dict['stockname'] = detail['stockname']
             detail_dict['imagename'] = detail['imagename']
+            detail_dict['spreadshirtlink'] = detail['spreadshirtlink']
 
             return_values.append(detail_dict)
 
