@@ -1,9 +1,12 @@
 from flask import Flask, g, jsonify, make_response
 from flask_restplus import Api, Resource, fields
+from flask_cors import CORS
 import sqlite3
 from os import path
 
 app = Flask(__name__)
+CORS(app)
+
 api = Api(app, version='1.0', title='APIs for Code.Sydney Merchandises',
           description='This is a Flask-Restplus data service that allows a client to consume APIs related to Code.Sydney merchandises.',
           )
