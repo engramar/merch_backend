@@ -27,7 +27,7 @@ def get_db():
 class AllMerch(Resource):
     @api.response(200, 'SUCCESSFUL: Contents successfully loaded')
     @api.response(204, 'NO CONTENT: No content in database')
-    @api.doc(description='Retrieving all records from the database for all suburbs.')
+    @api.doc(description='Retrieving all records from the database for all merchandises.')
     def get(self):
         db = get_db()
         details_cur = db.execute('select id, stockname, imagename, spreadshirtlink from stocks')
